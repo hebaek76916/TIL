@@ -1,0 +1,49 @@
+## Widget definition
+- kind
+- configuration
+    - staticConfiguration
+        - eg. 건강앱
+    - IntentConfiguration
+        - e.g 미리알림
+- supportedFamilies
+- Views
+    - **Placeholder**
+        - Widget의 기본 레이아웃과 구조를 정의하는 역할.
+        - 실제 데이터가 로드되기 전에 Widget이 어떻게 보일지를 미리 설정하는데 사용.
+        - 주로 Widget갤러리에서 여러 Widget의 미리보기를 표시할 때 활용
+        - 용도
+            - Widget갤러리에서 Widget의 기본 레이아웃을 보여줌
+            - 실제 데이터라 로드되기 전의 기본 디자인 제공
+        - 특징
+            - 동적인 데이터와 무관하게 기본 레이아웃을 정의
+            - 여러 위젯 크기(e.g small, middle, large)에 대한 기본 디자인 제공
+    - **Snapshot**
+        - Snapshot is where the system needs to quickly display a single entry, so the expectation is for your extension to quickly return a view as fast as possible, because when you do so, you’ll see your real widget in the gorgeous Widget Gallery on iOS
+        - Widget의 현재 상태를 나타내는 정적인 이미지 또는 데이터를 의미.
+        - 사용자가 Widget을 처음 추가할 때나 위젯의 미리보기를 표시할 때 사용.
+        - Snapshot은 위젯의 빠른 로딩과 초기 표시를 돕기 위해 사용, 실제 데이터 업데이트 전에 임시로 표시될 내용 제공
+        - 용도
+            - 사용자가 위젯을 추가할 때 초기화면을 빠르게 보여줌
+            - 위젯 갱신 전에 임시로 표시할 내용 제공
+        - 특징
+            - 정적이며 빠르게 로드
+            - 실제 데이터와는 별도로 제공될 수 있음
+    - Timeline
+        - Timeline은 Widget의 데이터와 업데이트 주기를 관리하는 핵심 개념
+        - Timeline을 통해 Widget이 언제, 어떤 데이터를 표시할지 정의할 수 있습니다.
+        - WidgetKit은 이 Timeline을 기반으로 Widget을 주기적으로 업데이트하여 최신정보를 사용자에게 제공
+        - 용도
+            - Widget의 데이터 업데이트 스케줄 관리
+            - 특정 시간에 특정 데이터를 표시하도록 설정
+        - 특징
+            - 여러 개의 `TimelineEntry` 를 포함하여 다양한 시점에 표시할 데이터를 정의
+            - Widget이 효율적으로 업데이트되도록 돕고, 배터리 소모를 최소화
+        - 구성요소
+            - `TimelineEntry` : 특정 시점에 표시할 데이터의 단위
+            - `Timeline` : 여러 `TimelineEntry`를 포함하여 전체 업데이트 스케쥴을 정의
+
+e.g 날씨 위젯
+
+- Snapshot : 사용자가 Widget을 처음 추가할 때 “현재 위치의 날씨를 로드중입니다”라는 정적인 메세지 출력
+- Placeholder : Widget 갤러리에서 “서울의 날씨”와 같은 기본 레이아웃을 미리 보여줌. 실제 데이터가 로드되기 전의 디자인을 설정.
+- Timeline : 매시간마다 새로운 날씨 데이터를 가져와서 위젯을 업데이트 하도록 설정. 오전 9시, 오후 12시, 오후 3시에 새로운 날씨 정보를 표시하도록 Timeline 구성할 수 있음.
