@@ -1,0 +1,49 @@
+import SwiftUI
+
+struct ContentView: View {
+    @State var theta: Double = 0
+    let radius: Double = 60
+    let colors: [Color] = [.purple, .red, .yellow, .blue, .green]
+
+    var body: some View {
+        ZStack {
+            ForEach(Array(colors.enumerated()), id: \.offset) { offset, style in
+                let offset = Double(offset) * (2 * .pi) / Double(colors.count)
+                ForEach([false, true], id: \.self) { reverse in
+                    Dot(radius: radius, theta: theta, offset: offset, style: style, reverse: reverse)
+                }
+            }
+        }
+        .task {
+            withAnimation(.linear(duration: 2).repeatForever(autoreverses: false)) {
+                theta = 2 * .pi
+            }
+        }
+    }
+}
+
+struct Dot: View, Animatable {
+    var radius, theta, offset: Double
+    var style: Color
+    var reverse = false
+    var animatableData: Double { get { theta } set { theta = newValue } }
+    var body: some View {
+        let theta = reverse ? -(theta + .pi) : theta
+        let scale = 0.5 + (abs((theta - .pi).remainder(dividingBy: 2 * .pi)))/(2 * .pi)
+        Circle()
+            .frame(width: 30)
+            .scaleEffect(x: scale, y: scale)
+            .offset(
+                x: radius * (cos(theta + offset) + cos(offset)),
+                y: radius * (sin(theta + offset) + sin(offset))
+            )
+            .foregroundStyle(style)
+            .rotationEffect(reverse ? .radians(.pi) : .zero)
+            .shadow(color: style.opacity(0.3), radius: 10, y: 30 * scale)
+    }
+}
+
+#Preview {
+    ContentView()
+}
+https://gist.github.com/Koshimizu-Takehito/e164578f6a8603d33eba6e1bc0a5fe08
